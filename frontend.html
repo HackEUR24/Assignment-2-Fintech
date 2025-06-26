@@ -387,7 +387,7 @@
           <p><b>🌳 Healthy Austrian Tree Association</b> (ZFR Number: 0123456789)</p>
           <div class="donation-inputs">
             <input type="number" id="donateAmount1" min="1" value="1" />
-            <button class="btn donate" onclick="donateToNGO('0xEF950D74059d872b94C4758EBdc24dA19972c0D6', 'donateAmount1')">Donate</button>
+            <button class="btn donate" onclick="donateToNGO('donation_wallet_address', 'donateAmount1')">Donate</button>
           </div>
         </div>
 
@@ -395,7 +395,7 @@
           <p><b>🦌 Austrian Wildlife Protection Fund</b> (ZFR Number: 9876543210)</p>
           <div class="donation-inputs">
             <input type="number" id="donateAmount2" min="1" value="1" />
-            <button class="btn donate" onclick="donateToNGO('0xEF950D74059d872b94C4758EBdc24dA19972c0D6', 'donateAmount2')">Donate</button>
+            <button class="btn donate" onclick="donateToNGO('donation_wallet_address', 'donateAmount2')">Donate</button>
           </div>
         </div>
 
@@ -460,11 +460,11 @@
     };
 
     const ngos = {
-    "0x6106426AD71a7AB01F9883203995192CC82314dE": "Healthy Austrian Tree Association",
-    "0xAnotherNGOAddressHere": "Austrian Wildlife Protection Fund"
+    "donation_wallet_address": "Healthy Austrian Tree Association",
+    "donation_wallet_address": "Austrian Wildlife Protection Fund"
     };
 
-    const CONTRACT_ADDRESS = "0x9af3b3E4675065056A4F6135EA0e0507D607506c";
+    const CONTRACT_ADDRESS = "ZFYC_deployment_address";
     const ABI = [
       "function mint(address to, uint256 tokenId, uint256 amount) public",
       "function retire(uint256 tokenId, uint256 amount) public",
