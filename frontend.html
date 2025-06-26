@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zerofy Fractional Carbon Credits</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .wallet-section {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .connect-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .connect-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .wallet-info {
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+
+    .section {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      background: white;
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn.retire {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    }
+
+    .btn.retire:hover {
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn.donate {
+      background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+      padding: 8px 20px;
+      font-size: 0.9rem;
+    }
+
+    .btn.donate:hover {
+      box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+    }
+
+    .metadata-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 1px solid #dee2e6;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .metadata-card h3 {
+      color: #495057;
+      margin-bottom: 20px;
+    }
+
+    .token-image {
+      max-width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+
+    .token-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .token-description {
+      color: #6c757d;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .token-attributes {
+      list-style: none;
+    }
+
+    .token-attributes li {
+      background: rgba(102, 126, 234, 0.1);
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #667eea;
+      font-weight: 500;
+    }
+
+    .receipt {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      border: 1px solid #4caf50;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+      color: #2e7d32;
+    }
+
+    .receipt.donation {
+      background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+      border-color: #2196F3;
+      color: #0D47A1;
+    }
+
+    .receipt h4 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .donation-group {
+      background: rgba(33, 150, 243, 0.05);
+      border: 1px solid rgba(33, 150, 243, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .donation-group p {
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #1976D2;
+    }
+
+    .donation-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .donation-inputs input {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .status {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      border: 1px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .balance-info {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border: 1px solid #2196F3;
+      color: #0D47A1;
+      padding: 20px;
+      border-radius: 15px;
+      white-space: pre-line;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .donation-inputs {
+        flex-direction: column;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌱 Zerofy</h1>
+      <p>Fractional Carbon Credits • Polygon Amoy Testnet</p>
+    </div>
+
+    <div class="content">
+      <!-- Wallet Connection Section -->
+      <div class="wallet-section">
+        <button class="connect-btn" onclick="connectWallet()">🔗 Connect Wallet</button>
+        <div class="wallet-info">
+          <p id="walletAddress">Not connected</p>
+          <div id="balance" class="balance-info" style="display: none;">Balance: -</div>
+        </div>
+      </div>
+
+      <div id="status" class="status" style="display: none;"></div>
+
+      <!-- Project Selection and Metadata -->
+      <div class="section">
+        <h3>📊 Select Carbon Credit Project</h3>
+        <div class="form-group">
+          <label for="projectSelect">Choose a project:</label>
+          <select id="projectSelect"></select>
+        </div>
+
+        <div id="metadataDisplay" class="metadata-card" style="display: none;">
+          <h3>Token Metadata</h3>
+          <img id="tokenImage" class="token-image" src="" alt="Token image" style="display: none;">
+          <div id="tokenName" class="token-name"></div>
+          <div id="tokenDescription" class="token-description"></div>
+          <ul id="tokenAttributes" class="token-attributes"></ul>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Minting Section -->
+        <div class="section">
+          <h3>✅ Mint Carbon Credits</h3>
+          <div class="form-group">
+            <label for="mintAmount">Amount to Mint (€):</label>
+            <input type="number" id="mintAmount" min="1" value="1">
+          </div>
+          <button class="btn" onclick="mint()">✅ Mint ZFYC</button>
+        </div>
+
+        <!-- Retirement Section -->
+        <div class="section">
+          <h3>🔥 Retire Carbon Credits</h3>
+          <div class="form-group">
+            <label for="retireAmount">Amount to Retire (€):</label>
+            <input type="number" id="retireAmount" min="1" value="1">
+          </div>
+          <button class="btn retire" onclick="retire()">🔥 Retire ZFYC</button>
+          
+          <div id="retireReceipt" class="receipt" style="display: none;">
+            <h4>🎉 Retirement Receipt</h4>
+            <p id="receiptContent"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donations Section -->
+      <div class="section">
+        <h3>💝 Donate ZFYC Tokens</h3>
+
+        <div class="donation-group">
+          <p><b>🌳 Healthy Austrian Tree Association</b> (ZFR Number: 0123456789)</p>
+          <div class="donation-inputs">
+            <input type="number" id="donateAmount1" min="1" value="1" />
+            <button class="btn donate" onclick="donateToNGO('0xEF950D74059d872b94C4758EBdc24dA19972c0D6', 'donateAmount1')">Donate</button>
+          </div>
+        </div>
+
+        <div class="donation-group">
+          <p><b>🦌 Austrian Wildlife Protection Fund</b> (ZFR Number: 9876543210)</p>
+          <div class="donation-inputs">
+            <input type="number" id="donateAmount2" min="1" value="1" />
+            <button class="btn donate" onclick="donateToNGO('0xEF950D74059d872b94C4758EBdc24dA19972c0D6', 'donateAmount2')">Donate</button>
+          </div>
+        </div>
+
+        <div id="donationReceipt" class="receipt donation" style="display: none;">
+          <h4>🎉 Donation Receipt</h4>
+          <p id="donationReceiptContent"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ethers.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <script>
+    // Mock carbon credit projects database
+    const carbonCredits = [
+      { id: 0, name: "Amazon Rainforest", description: "Protecting Amazon basin biodiversity", availableAmount: 100 },
+      { id: 1, name: "Kenya Wind Farm", description: "Wind energy in Kenya", availableAmount: 50 },
+      { id: 2, name: "Indian Solar Power", description: "Large-scale solar plant", availableAmount: 75 },
+      { id: 3, name: "Canadian Forest Conservation", description: "Sustainable forest management", availableAmount: 60 }
+    ];
+
+    // Local inline metadata for tokens
+    const localMetadata = {
+      0: {
+        name: "Amazon Rainforest",
+        description: "Protecting Amazon basin biodiversity",
+        image: "https://cdn.prod.website-files.com/653bdca4fb0a05628a12eb43/653bdca4fb0a05628a12ed9c_Rainforest_Logo.webp",
+        attributes: [
+          { trait_type: "Location", value: "Brazil" },
+          { trait_type: "Vintage", value: "2023" }
+        ]
+      },
+      1: {
+        name: "Kenya Wind Farm",
+        description: "Wind energy in Kenya",
+        image: "https://www.energyweek.fi/wp-content/uploads/2024/11/Wind_renewable_energy_4vari_RGB.png",
+        attributes: [
+          { trait_type: "Location", value: "Kenya" },
+          { trait_type: "Vintage", value: "2022" }
+        ]
+      },
+      2: {
+        name: "Indian Solar Power",
+        description: "Large-scale solar plant",
+        image: "https://s3u.tmimgcdn.com/u37752224/d1542d7ffc0a66738e305f5026b2ac54.gif",
+        attributes: [
+          { trait_type: "Location", value: "India" },
+          { trait_type: "Vintage", value: "2021" }
+        ]
+      },
+      3: {
+        name: "Canadian Forest Conservation",
+        description: "Sustainable forest management",
+        image: "https://freedesignfile.com/upload/2016/08/Forest-trees-logo-vectors-01.jpg",
+        attributes: [
+          { trait_type: "Location", value: "Canada" },
+          { trait_type: "Vintage", value: "2020" }
+        ]
+      }
+    };
+
+    const ngos = {
+    "0x6106426AD71a7AB01F9883203995192CC82314dE": "Healthy Austrian Tree Association",
+    "0xAnotherNGOAddressHere": "Austrian Wildlife Protection Fund"
+    };
+
+    const CONTRACT_ADDRESS = "0x9af3b3E4675065056A4F6135EA0e0507D607506c";
+    const ABI = [
+      "function mint(address to, uint256 tokenId, uint256 amount) public",
+      "function retire(uint256 tokenId, uint256 amount) public",
+      "function donate(uint256 tokenId, uint256 amount, address ngo) public",
+      "function balanceOf(address owner, uint256 tokenId) view returns (uint256)"
+    ];
+
+    let signer;
+    let contract;
+
+    async function connectWallet() {
+      if (!window.ethereum) return alert("Please install MetaMask");
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      const address = await signer.getAddress();
+      document.getElementById("walletAddress").innerText = "Connected: " + address;
+      document.getElementById("balance").style.display = "block";
+      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+      populateProjectDropdown();
+      updateBalance();
+      setStatus("");
+
+      // Show metadata for the first token initially
+      if (carbonCredits.length > 0) {
+        fetchAndDisplayMetadata(carbonCredits[0].id);
+      }
+    }
+
+    function populateProjectDropdown() {
+      const select = document.getElementById("projectSelect");
+      select.innerHTML = "";
+
+      carbonCredits.forEach(project => {
+        const option = document.createElement("option");
+        option.value = project.id;
+        option.text = `${project.name} (Available: ${project.availableAmount})`;
+        select.appendChild(option);
+      });
+
+      select.addEventListener("change", (e) => {
+        const tokenId = parseInt(e.target.value);
+        fetchAndDisplayMetadata(tokenId);
+      });
+    }
+
+    function fetchAndDisplayMetadata(tokenId) {
+      const metadata = localMetadata[tokenId];
+      if (!metadata) return;
+
+      const metadataDisplay = document.getElementById("metadataDisplay");
+      const img = document.getElementById("tokenImage");
+      const name = document.getElementById("tokenName");
+      const desc = document.getElementById("tokenDescription");
+      const attrList = document.getElementById("tokenAttributes");
+
+      metadataDisplay.style.display = "block";
+      metadataDisplay.classList.add("fade-in");
+
+      if (metadata.image) {
+        img.src = metadata.image;
+        img.style.display = "block";
+      } else {
+        img.style.display = "none";
+      }
+
+      name.textContent = metadata.name || "";
+      desc.textContent = metadata.description || "";
+
+      attrList.innerHTML = "";
+      if (metadata.attributes && Array.isArray(metadata.attributes)) {
+        metadata.attributes.forEach(attr => {
+          const li = document.createElement("li");
+          li.textContent = `${attr.trait_type}: ${attr.value}`;
+          attrList.appendChild(li);
+        });
+      }
+    }
+
+    async function updateBalance() {
+      try {
+        const address = await signer.getAddress();
+        let balanceText = "Token Balances:\n\n";
+
+        for (const project of carbonCredits) {
+          const bal = await contract.balanceOf(address, project.id);
+          balanceText += `${project.name}: ${bal.toString()} tokens\n`;
+        }
+
+        document.getElementById("balance").innerText = balanceText;
+      } catch (err) {
+        setStatus("Failed to fetch balance: " + err.message);
+      }
+    }
+
+    function setStatus(msg) {
+      const statusEl = document.getElementById("status");
+      if (msg) {
+        statusEl.innerText = msg;
+        statusEl.style.display = "block";
+        statusEl.classList.add("fade-in");
+      } else {
+        statusEl.style.display = "none";
+      }
+    }
+
+    async function mint() {
+      console.log("=== MINT FUNCTION CALLED ===");
+      
+      const tokenIdRaw = document.getElementById("projectSelect").value;
+      const amountRaw = document.getElementById("mintAmount").value;
+      
+      console.log("Raw values - tokenId:", tokenIdRaw, "amount:", amountRaw);
+      console.log("Types - tokenId:", typeof tokenIdRaw, "amount:", typeof amountRaw);
+      
+      const tokenId = parseInt(tokenIdRaw);
+      const amount = parseInt(amountRaw);
+      
+      console.log("Parsed values - tokenId:", tokenId, "amount:", amount);
+      console.log("Parsed types - tokenId:", typeof tokenId, "amount:", typeof amount);
+      console.log("Are numbers? tokenId:", !isNaN(tokenId), "amount:", !isNaN(amount));
+
+      if (!amount || amount <= 0) return alert("Enter a valid mint amount.");
+
+      const project = carbonCredits.find(p => p.id === tokenId);
+      if (!project) return alert("Invalid project selected.");
+      console.log("Project found:", project);
+
+      if (amount > project.availableAmount) {
+        return alert("Amount exceeds available tokens.");
+      }
+
+      try {
+        setStatus("Minting...");
+        
+        console.log("Signer exists:", !!signer);
+        console.log("Contract exists:", !!contract);
+        console.log("Contract address:", contract?.address);
+        
+        const address = await signer.getAddress();
+        console.log("Wallet address:", address);
+        
+        // Try to estimate gas first
+        console.log("Attempting to estimate gas...");
+        try {
+          const gasEstimate = await contract.estimateGas.mint(address, tokenId, amount);
+          console.log("Gas estimate:", gasEstimate.toString());
+        } catch (gasErr) {
+          console.error("Gas estimation failed:", gasErr);
+          throw new Error("Transaction will fail - gas estimation error: " + gasErr.message);
+        }
+        
+        console.log("Calling contract.mint with:", {
+          address: address,
+          tokenId: tokenId,
+          amount: amount
+        });
+        
+        // Test if we can call a view function first
+        try {
+          const currentBalance = await contract.balanceOf(address, tokenId);
+          console.log("Current balance before mint:", currentBalance.toString());
+        } catch (viewErr) {
+          console.error("Can't even read from contract:", viewErr);
+        }
+        
+        // Let's try with explicit type conversion to BigNumber
+        const tokenIdBN = ethers.BigNumber.from(tokenId);
+        const amountBN = ethers.BigNumber.from(amount);
+        
+        console.log("BigNumber values:", {
+          tokenIdBN: tokenIdBN.toString(),
+          amountBN: amountBN.toString()
+        });
+        
+        // Try with original parameters first, then BigNumber if that fails
+        console.log("Trying mint with original parameters...");
+        let tx;
+        try {
+          tx = await contract.mint(address, tokenId, amount);
+        } catch (firstError) {
+          console.log("First attempt failed, trying with BigNumber...");
+          tx = await contract.mint(address, tokenIdBN, amountBN);
+        }
+        console.log("Transaction submitted:", tx);
+        
+        await tx.wait();
+        setStatus(`Minted ${amount} tokens of ${project.name}`);
+
+        project.availableAmount -= amount;
+        populateProjectDropdown();
+        updateBalance();
+      } catch (err) {
+        console.error("=== MINT ERROR DETAILS ===");
+        console.error("Error message:", err.message);
+        console.error("Error code:", err.code);
+        console.error("Error data:", err.data);
+        console.error("Full error:", err);
+        setStatus("Mint failed: " + err.message);
+      }
+    }
+
+    async function retire() {
+    const tokenId = parseInt(document.getElementById("projectSelect").value);
+    const amount = parseInt(document.getElementById("retireAmount").value);
+
+    if (!amount || amount <= 0) return alert("Enter a valid retire amount.");
+
+    try {
+        setStatus("Retiring...");
+        const tx = await contract.retire(tokenId, amount);
+        const receipt = await tx.wait();  // Wait for confirmation
+
+        setStatus(`Retired ${amount} tokens.`);
+
+        updateBalance();
+
+        const txHash = receipt.transactionHash;
+        const project = carbonCredits.find(p => p.id === tokenId);
+        const date = new Date().toLocaleString();
+
+        const receiptText = `
+        Successfully retired ${amount} token(s) from project "<b>${project.name}</b>".<br>
+        Converted to ${amount} carbon offsets.<br>
+        Date: ${date}<br>
+        Transaction ID: <a href="https://amoy.polygonscan.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash}</a>
+        `;
+        document.getElementById("receiptContent").innerHTML = receiptText;
+        const receiptEl = document.getElementById("retireReceipt");
+        receiptEl.style.display = "block";
+        receiptEl.classList.add("fade-in");
+    } catch (err) {
+        setStatus("Retire failed: " + err.message);
+        document.getElementById("retireReceipt").style.display = "none";
+    }
+    }
+
+    async function donateToNGO(ngoAddress, amountInputId) {
+    const tokenId = parseInt(document.getElementById("projectSelect").value);
+    const amount = parseInt(document.getElementById(amountInputId).value);
+
+    if (!amount || amount <= 0) {
+        return alert("Enter a valid donation amount.");
+    }
+
+    if (!ethers.utils.isAddress(ngoAddress)) {
+        return alert("Invalid NGO wallet address.");
+    }
+
+    try {
+        setStatus(`Donating ${amount} tokens to ${ngoAddress}...`);
+        const tx = await contract.donate(tokenId, amount, ngoAddress);
+        const receipt = await tx.wait(); // wait for confirmation
+
+        setStatus(`Donated ${amount} tokens to ${ngoAddress}`);
+
+        updateBalance();
+
+        // Show receipt with transaction hash & details
+        const signerAddress = await signer.getAddress();
+        const date = new Date().toLocaleString();
+        const txHash = receipt.transactionHash;
+
+        const ngoName = ngos[ngoAddress] || "Healthy Austrian Tree Association";
+
+        const receiptHTML = `
+        Successfully donated <b>${amount}</b> token(s) from project ID <b>${tokenId}</b>.<br>
+        Donor: <b>${signerAddress}</b><br>
+        Recipient NGO: <b>${ngoName}</b> (${ngoAddress})<br>
+        Date: ${date}<br>
+        Transaction ID: <a href="https://amoy.polygonscan.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash}</a>
+        `;
+        document.getElementById("donationReceiptContent").innerHTML = receiptHTML;
+        const receiptEl = document.getElementById("donationReceipt");
+        receiptEl.style.display = "block";
+        receiptEl.classList.add("fade-in");
+
+    } catch (err) {
+        setStatus("Donation failed: " + err.message);
+        document.getElementById("donationReceipt").style.display = "none";
+    }
+    }
+  </script>
+</body>
+</html>
