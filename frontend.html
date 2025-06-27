@@ -3,6 +3,7 @@
 <head>
   <title>Zerofy Fractional Carbon Credits</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Formatting of frontend -->
   <style>
     * {
       margin: 0;
@@ -317,61 +318,87 @@
   </style>
 </head>
 <body>
+  <!-- Container wrapping the entire application -->
   <div class="container">
+
+    <!-- Header section with title and subtitle -->
     <div class="header">
       <h1>🌱 Zerofy</h1>
       <p>Fractional Carbon Credits • Polygon Amoy Testnet</p>
     </div>
 
+    <!-- Main content wrapper -->
     <div class="content">
+
       <!-- Wallet Connection Section -->
       <div class="wallet-section">
+        <!-- Button to trigger wallet connection -->
         <button class="connect-btn" onclick="connectWallet()">🔗 Connect Wallet</button>
+        
+        <!-- Area to display wallet address and balance after connection -->
         <div class="wallet-info">
           <p id="walletAddress">Not connected</p>
           <div id="balance" class="balance-info" style="display: none;">Balance: -</div>
         </div>
       </div>
 
+      <!-- Dynamic status message area (e.g., success, error, pending) -->
       <div id="status" class="status" style="display: none;"></div>
 
-      <!-- Project Selection and Metadata -->
+      <!-- Section for selecting and displaying carbon credit project metadata -->
       <div class="section">
         <h3>📊 Select Carbon Credit Project</h3>
+
+        <!-- Dropdown for selecting project -->
         <div class="form-group">
           <label for="projectSelect">Choose a project:</label>
           <select id="projectSelect"></select>
         </div>
 
+        <!-- Metadata display card populated after selection -->
         <div id="metadataDisplay" class="metadata-card" style="display: none;">
           <h3>Token Metadata</h3>
+          <!-- Token image preview -->
           <img id="tokenImage" class="token-image" src="" alt="Token image" style="display: none;">
+          
+          <!-- Metadata content -->
           <div id="tokenName" class="token-name"></div>
           <div id="tokenDescription" class="token-description"></div>
           <ul id="tokenAttributes" class="token-attributes"></ul>
         </div>
       </div>
 
+      <!-- Grid layout for Minting and Retiring credits -->
       <div class="grid">
+
         <!-- Minting Section -->
         <div class="section">
           <h3>✅ Mint Carbon Credits</h3>
+
+          <!-- Input field for mint amount -->
           <div class="form-group">
             <label for="mintAmount">Amount to Mint (€):</label>
             <input type="number" id="mintAmount" min="1" value="1">
           </div>
+
+          <!-- Trigger mint function -->
           <button class="btn" onclick="mint()">✅ Mint ZFYC</button>
         </div>
 
         <!-- Retirement Section -->
         <div class="section">
           <h3>🔥 Retire Carbon Credits</h3>
+
+          <!-- Input field for retirement amount -->
           <div class="form-group">
             <label for="retireAmount">Amount to Retire (€):</label>
             <input type="number" id="retireAmount" min="1" value="1">
           </div>
+
+          <!-- Trigger retire function -->
           <button class="btn retire" onclick="retire()">🔥 Retire ZFYC</button>
           
+          <!-- Receipt shown after successful retirement -->
           <div id="retireReceipt" class="receipt" style="display: none;">
             <h4>🎉 Retirement Receipt</h4>
             <p id="receiptContent"></p>
@@ -383,6 +410,7 @@
       <div class="section">
         <h3>💝 Donate ZFYC Tokens</h3>
 
+        <!-- First NGO donation option -->
         <div class="donation-group">
           <p><b>🌳 Healthy Austrian Tree Association</b> (ZFR Number: 0123456789)</p>
           <div class="donation-inputs">
@@ -391,6 +419,7 @@
           </div>
         </div>
 
+        <!-- Second NGO donation option -->
         <div class="donation-group">
           <p><b>🦌 Austrian Wildlife Protection Fund</b> (ZFR Number: 9876543210)</p>
           <div class="donation-inputs">
@@ -399,6 +428,7 @@
           </div>
         </div>
 
+        <!-- Receipt shown after successful donation -->
         <div id="donationReceipt" class="receipt donation" style="display: none;">
           <h4>🎉 Donation Receipt</h4>
           <p id="donationReceiptContent"></p>
@@ -407,19 +437,20 @@
     </div>
   </div>
 
-  <!-- Ethers.js -->
+  <!-- Load Ethers.js library for blockchain interaction -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
+</body>
+  
   <script>
-    // Mock carbon credit projects database
+    // List of available carbon credit projects with metadata
     const carbonCredits = [
       { id: 0, name: "Amazon Rainforest", description: "Protecting Amazon basin biodiversity", availableAmount: 100 },
       { id: 1, name: "Kenya Wind Farm", description: "Wind energy in Kenya", availableAmount: 50 },
       { id: 2, name: "Indian Solar Power", description: "Large-scale solar plant", availableAmount: 75 },
       { id: 3, name: "Canadian Forest Conservation", description: "Sustainable forest management", availableAmount: 60 }
     ];
-
-    // Local inline metadata for tokens
+  
+    // Local inline metadata for token display
     const localMetadata = {
       0: {
         name: "Amazon Rainforest",
@@ -458,12 +489,14 @@
         ]
       }
     };
-
+  
+    // Placeholder mapping for NGO names by wallet address
     const ngos = {
-    "donation_wallet_address": "Healthy Austrian Tree Association",
-    "donation_wallet_address": "Austrian Wildlife Protection Fund"
+      "donation_wallet_address": "Healthy Austrian Tree Association",
+      "donation_wallet_address": "Austrian Wildlife Protection Fund"
     };
-
+  
+    // Placeholder contract address and ABI definition
     const CONTRACT_ADDRESS = "ZFYC_deployment_address";
     const ABI = [
       "function mint(address to, uint256 tokenId, uint256 amount) public",
@@ -471,71 +504,85 @@
       "function donate(uint256 tokenId, uint256 amount, address ngo) public",
       "function balanceOf(address owner, uint256 tokenId) view returns (uint256)"
     ];
-
+  
+    // Global variables to store signer and contract instance
     let signer;
     let contract;
-
+  
+    // Connect to user's wallet and initialize contract
     async function connectWallet() {
       if (!window.ethereum) return alert("Please install MetaMask");
-
+  
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
       signer = provider.getSigner();
       const address = await signer.getAddress();
+  
+      // Update UI with wallet address and show balance section
       document.getElementById("walletAddress").innerText = "Connected: " + address;
       document.getElementById("balance").style.display = "block";
+  
+      // Instantiate contract object
       contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
+  
+      // Populate project dropdown and fetch initial data
       populateProjectDropdown();
       updateBalance();
       setStatus("");
-
-      // Show metadata for the first token initially
+  
+      // Show metadata for the first project initially
       if (carbonCredits.length > 0) {
         fetchAndDisplayMetadata(carbonCredits[0].id);
       }
     }
-
+  
+    // Populate the dropdown with available projects
     function populateProjectDropdown() {
       const select = document.getElementById("projectSelect");
       select.innerHTML = "";
-
+  
       carbonCredits.forEach(project => {
         const option = document.createElement("option");
         option.value = project.id;
         option.text = `${project.name} (Available: ${project.availableAmount})`;
         select.appendChild(option);
       });
-
+  
+      // Change metadata when user selects a different project
       select.addEventListener("change", (e) => {
         const tokenId = parseInt(e.target.value);
         fetchAndDisplayMetadata(tokenId);
       });
     }
-
+  
+    // Display selected project's metadata in the UI
     function fetchAndDisplayMetadata(tokenId) {
       const metadata = localMetadata[tokenId];
       if (!metadata) return;
-
+  
       const metadataDisplay = document.getElementById("metadataDisplay");
       const img = document.getElementById("tokenImage");
       const name = document.getElementById("tokenName");
       const desc = document.getElementById("tokenDescription");
       const attrList = document.getElementById("tokenAttributes");
-
+  
+      // Show metadata container and fade in effect
       metadataDisplay.style.display = "block";
       metadataDisplay.classList.add("fade-in");
-
+  
+      // Display image if available
       if (metadata.image) {
         img.src = metadata.image;
         img.style.display = "block";
       } else {
         img.style.display = "none";
       }
-
+  
+      // Set project name and description
       name.textContent = metadata.name || "";
       desc.textContent = metadata.description || "";
-
+  
+      // Show additional metadata attributes
       attrList.innerHTML = "";
       if (metadata.attributes && Array.isArray(metadata.attributes)) {
         metadata.attributes.forEach(attr => {
@@ -545,23 +592,25 @@
         });
       }
     }
-
+  
+    // Fetch and display balance for all token IDs
     async function updateBalance() {
       try {
         const address = await signer.getAddress();
         let balanceText = "Token Balances:\n\n";
-
+  
         for (const project of carbonCredits) {
           const bal = await contract.balanceOf(address, project.id);
           balanceText += `${project.name}: ${bal.toString()} tokens\n`;
         }
-
+  
         document.getElementById("balance").innerText = balanceText;
       } catch (err) {
         setStatus("Failed to fetch balance: " + err.message);
       }
     }
-
+  
+    // Show or hide a status message in the UI
     function setStatus(msg) {
       const statusEl = document.getElementById("status");
       if (msg) {
@@ -573,43 +622,53 @@
       }
     }
 
+    // Handles the minting of new carbon credit tokens to the connected wallet
     async function mint() {
       console.log("=== MINT FUNCTION CALLED ===");
       
+      // Get raw values from the DOM
       const tokenIdRaw = document.getElementById("projectSelect").value;
       const amountRaw = document.getElementById("mintAmount").value;
-      
+    
+      // Log and check raw input types for debugging
       console.log("Raw values - tokenId:", tokenIdRaw, "amount:", amountRaw);
       console.log("Types - tokenId:", typeof tokenIdRaw, "amount:", typeof amountRaw);
-      
+    
+      // Convert inputs to integers
       const tokenId = parseInt(tokenIdRaw);
       const amount = parseInt(amountRaw);
-      
+    
+      // Verify that parsed values are valid numbers
       console.log("Parsed values - tokenId:", tokenId, "amount:", amount);
       console.log("Parsed types - tokenId:", typeof tokenId, "amount:", typeof amount);
       console.log("Are numbers? tokenId:", !isNaN(tokenId), "amount:", !isNaN(amount));
-
+    
+      // Ensure the amount is a positive number
       if (!amount || amount <= 0) return alert("Enter a valid mint amount.");
-
+    
+      // Find the selected project based on tokenId
       const project = carbonCredits.find(p => p.id === tokenId);
       if (!project) return alert("Invalid project selected.");
       console.log("Project found:", project);
-
+    
+      // Check if requested amount exceeds available supply
       if (amount > project.availableAmount) {
         return alert("Amount exceeds available tokens.");
       }
-
+    
       try {
         setStatus("Minting...");
-        
+    
+        // Log internal contract and signer checks
         console.log("Signer exists:", !!signer);
         console.log("Contract exists:", !!contract);
         console.log("Contract address:", contract?.address);
-        
+    
+        // Get the current wallet address
         const address = await signer.getAddress();
         console.log("Wallet address:", address);
-        
-        // Try to estimate gas first
+    
+        // Estimate gas usage for the transaction to preempt possible failure
         console.log("Attempting to estimate gas...");
         try {
           const gasEstimate = await contract.estimateGas.mint(address, tokenId, amount);
@@ -618,31 +677,25 @@
           console.error("Gas estimation failed:", gasErr);
           throw new Error("Transaction will fail - gas estimation error: " + gasErr.message);
         }
-        
-        console.log("Calling contract.mint with:", {
-          address: address,
-          tokenId: tokenId,
-          amount: amount
-        });
-        
-        // Test if we can call a view function first
+    
+        // Check current balance before minting (view function)
         try {
           const currentBalance = await contract.balanceOf(address, tokenId);
           console.log("Current balance before mint:", currentBalance.toString());
         } catch (viewErr) {
           console.error("Can't even read from contract:", viewErr);
         }
-        
-        // Let's try with explicit type conversion to BigNumber
+    
+        // Prepare BigNumber representations (if needed for fallback)
         const tokenIdBN = ethers.BigNumber.from(tokenId);
         const amountBN = ethers.BigNumber.from(amount);
-        
+    
         console.log("BigNumber values:", {
           tokenIdBN: tokenIdBN.toString(),
           amountBN: amountBN.toString()
         });
-        
-        // Try with original parameters first, then BigNumber if that fails
+    
+        // Try minting with original values first, fallback to BigNumber
         console.log("Trying mint with original parameters...");
         let tx;
         try {
@@ -651,15 +704,17 @@
           console.log("First attempt failed, trying with BigNumber...");
           tx = await contract.mint(address, tokenIdBN, amountBN);
         }
+    
         console.log("Transaction submitted:", tx);
-        
-        await tx.wait();
+        await tx.wait();  // Wait for transaction confirmation
+    
+        // Success: update UI and internal project availability
         setStatus(`Minted ${amount} tokens of ${project.name}`);
-
         project.availableAmount -= amount;
         populateProjectDropdown();
         updateBalance();
       } catch (err) {
+        // Catch and log detailed errors if the minting fails
         console.error("=== MINT ERROR DETAILS ===");
         console.error("Error message:", err.message);
         console.error("Error code:", err.code);
@@ -668,70 +723,98 @@
         setStatus("Mint failed: " + err.message);
       }
     }
-
+    
+    // Function to handle retiring (burning) carbon credit tokens
     async function retire() {
-    const tokenId = parseInt(document.getElementById("projectSelect").value);
-    const amount = parseInt(document.getElementById("retireAmount").value);
-
-    if (!amount || amount <= 0) return alert("Enter a valid retire amount.");
-
-    try {
+      // Retrieve the selected token ID and the amount to retire from the UI
+      const tokenId = parseInt(document.getElementById("projectSelect").value);
+      const amount = parseInt(document.getElementById("retireAmount").value);
+    
+      // Input validation: ensure the amount is a positive number
+      if (!amount || amount <= 0) return alert("Enter a valid retire amount.");
+    
+      try {
+        // Show a status message to indicate the process has started
         setStatus("Retiring...");
+    
+        // Call the `retire` method on the smart contract to burn the tokens
         const tx = await contract.retire(tokenId, amount);
-        const receipt = await tx.wait();  // Wait for confirmation
-
+    
+        // Wait for the transaction to be mined
+        const receipt = await tx.wait();
+    
+        // Update the status with a success message
         setStatus(`Retired ${amount} tokens.`);
-
+    
+        // Refresh the user's token balance display
         updateBalance();
-
+    
+        // Retrieve transaction details to generate a receipt
         const txHash = receipt.transactionHash;
-        const project = carbonCredits.find(p => p.id === tokenId);
-        const date = new Date().toLocaleString();
-
+        const project = carbonCredits.find(p => p.id === tokenId); // Get project info
+        const date = new Date().toLocaleString(); // Get local date/time
+    
+        // Build HTML receipt content with project and transaction details
         const receiptText = `
-        Successfully retired ${amount} token(s) from project "<b>${project.name}</b>".<br>
-        Converted to ${amount} carbon offsets.<br>
-        Date: ${date}<br>
-        Transaction ID: <a href="https://amoy.polygonscan.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash}</a>
+          Successfully retired ${amount} token(s) from project "<b>${project.name}</b>".<br>
+          Converted to ${amount} carbon offsets.<br>
+          Date: ${date}<br>
+          Transaction ID: <a href="https://amoy.polygonscan.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash}</a>
         `;
+    
+        // Inject the receipt into the UI and display it
         document.getElementById("receiptContent").innerHTML = receiptText;
         const receiptEl = document.getElementById("retireReceipt");
         receiptEl.style.display = "block";
         receiptEl.classList.add("fade-in");
-    } catch (err) {
+      } catch (err) {
+        // If an error occurs, display an error status and hide the receipt
         setStatus("Retire failed: " + err.message);
         document.getElementById("retireReceipt").style.display = "none";
+      }
     }
-    }
-
+    
+    // Function to handle donation of tokens to a selected NGO
     async function donateToNGO(ngoAddress, amountInputId) {
+    // Get the selected project ID and donation amount from the DOM
     const tokenId = parseInt(document.getElementById("projectSelect").value);
     const amount = parseInt(document.getElementById(amountInputId).value);
 
+    // Validate donation amount
     if (!amount || amount <= 0) {
         return alert("Enter a valid donation amount.");
     }
 
+    // Validate the NGO wallet address
     if (!ethers.utils.isAddress(ngoAddress)) {
         return alert("Invalid NGO wallet address.");
     }
 
     try {
+        // Show temporary status message
         setStatus(`Donating ${amount} tokens to ${ngoAddress}...`);
-        const tx = await contract.donate(tokenId, amount, ngoAddress);
-        const receipt = await tx.wait(); // wait for confirmation
 
+        // Call the donate function on the contract
+        const tx = await contract.donate(tokenId, amount, ngoAddress);
+
+        // Wait for the transaction to be mined
+        const receipt = await tx.wait();
+
+        // Update the UI with success status
         setStatus(`Donated ${amount} tokens to ${ngoAddress}`);
 
+        // Refresh user token balances
         updateBalance();
 
-        // Show receipt with transaction hash & details
+        // Retrieve sender address and transaction details for the receipt
         const signerAddress = await signer.getAddress();
         const date = new Date().toLocaleString();
         const txHash = receipt.transactionHash;
 
+        // Resolve NGO name or fallback
         const ngoName = ngos[ngoAddress] || "Healthy Austrian Tree Association";
 
+        // Construct the donation receipt HTML
         const receiptHTML = `
         Successfully donated <b>${amount}</b> token(s) from project ID <b>${tokenId}</b>.<br>
         Donor: <b>${signerAddress}</b><br>
@@ -739,12 +822,15 @@
         Date: ${date}<br>
         Transaction ID: <a href="https://amoy.polygonscan.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash}</a>
         `;
+
+        // Display the receipt on the UI
         document.getElementById("donationReceiptContent").innerHTML = receiptHTML;
         const receiptEl = document.getElementById("donationReceipt");
         receiptEl.style.display = "block";
         receiptEl.classList.add("fade-in");
 
     } catch (err) {
+        // Display error if donation transaction fails
         setStatus("Donation failed: " + err.message);
         document.getElementById("donationReceipt").style.display = "none";
     }
