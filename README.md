@@ -14,25 +14,169 @@ This MVP showcases a blockchain-based approach to environmental accountability, 
 
 This project demonstrates how blockchain can support traceable, programmable climate action in a user-friendly web interface.
 
-## Programmes Used
+## Programs Used
 
-**VS Code** <br>
-VS code is used as the code editor for this project to develop the different file types used in the project (https://code.visualstudio.com)
+### **VS Code**
+[Visual Studio Code](https://code.visualstudio.com) was used as the code editor for this project to develop and manage the various file types, including Solidity smart contracts, deployment scripts, and frontend HTML/JavaScript files.
 
-**MetaMask** <br>
-Metamask is used as a wallet to be able to engage with the MVP on the frontend. It allows a user to connect to the created dAPP to engage with the platform. It also enables the user to pay gas fees in the testnet using POL. For the purpose of the MVP a small balance of the amoy token is needed which can be retrieved from a faucet such as https://faucet.stakepool.dev.br/amoy
+---
 
-**Node.js** <br>
-Node.js is installed as a JavaScript runtime allowing for execution in the terminal. It allows for use of the npm package manager and allows for use of neccesary tools such as Hardhat and Ethers.js (https://nodejs.org/).
-A directory is then created by through inserting the following commands in the terminal: <br>
-`>`_mkdir zerofy-mvp_ <br>
-`>`_cd zerofy-mvp_ <br>
-`>`_code ._ <br>
-This opens the folder in Vs Code. Following this the following commands are then input into the terminal to create a hardhat-based smart contract project: <br>
-`>`_cd path\to\your\project_<br>
-`>`_npm init -y_ - initialises a new Node.js project<br>
-`>`_npm install --save-dev hardhat_ - installs hardhat development framework into folder<br>
-`>`_npx hardhat_ - runs hardhats setup wizard, where a JavaScript Project is created<br>
+### **Alchemy**
+[Alchemy](https://www.alchemy.com/) was used to set up a blockchain app and provide a **reliable RPC endpoint** for interacting with the Polygon Amoy testnet. It allowed the project to:
+- Deploy smart contracts via Hardhat
+- Query on-chain data
+- Broadcast transactions from the frontend and backend
+
+---
+
+### **MetaMask**
+[MetaMask](https://metamask.io) was used as a browser wallet to connect to the dApp from the frontend. It enables:
+- Secure wallet connection using `window.ethereum`
+- Transaction signing for minting, retiring, and donating tokens
+- Gas fee payment using testnet POL tokens
+
+>  A small testnet POL balance is required, which can be obtained from an [Amoy faucet](https://faucet.stakepool.dev.br/amoy).
+
+---
+
+### **Node.js**
+[Node.js](https://nodejs.org/) is a JavaScript runtime that allows execution of scripts from the terminal. It provides:
+- The `npm` package manager
+- Compatibility with Hardhat, Ethers.js, and deployment scripts
+---
+
+### **OpenZeppelin Contracts**
+[OpenZeppelin](https://openzeppelin.com/contracts/) provides secure and audited smart contract templates.  
+This project uses the `ERC1155` token standard from OpenZeppelin to represent fractional carbon credits.
+
+Installed with:
+
+```bash
+npm install @openzeppelin/contracts
+```
+
+---
+
+###  Project Initialization Steps
+
+```bash
+# Create and open your project folder in VS Code
+mkdir zerofy-mvp
+cd zerofy-mvp
+code .
+
+# Set up a Hardhat-based smart contract project
+npm init -y                          # Initialize Node.js project
+npm install --save-dev hardhat      # Install Hardhat
+npx hardhat                         # Launch Hardhat setup wizard
+```
+##  Project Structure
+
+```
+zerofy-mvp/
+├── Scripts/              # Deployment and interaction scripts (e.g., deploy.js)
+├── contracts/            # Solidity smart contracts (e.g., ZFYC.sol)
+├── ignition/modules/     # Hardhat Ignition modules (for advanced deployments)
+├── test/                 # Test files for smart contract functionality
+├── frontend.html         # Frontend interface for the MVP (served in browser)
+├── hardhat.config.js     # Hardhat configuration (networks, compiler)
+├── package.json          # Project metadata and dependencies
+├── package-lock.json     # Lock file for consistent installs
+├── .gitignore            # Git exclusions (e.g., node_modules/, .env)
+└── README.md             # Project documentation (you’re reading it!)
+```
+
+##  Installation & Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/zerofy-mvp.git
+   cd zerofy-mvp
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Compile smart contracts:
+   ```bash
+   npx hardhat compile
+   ```
+
+4. Configure `.env` with your Alchemy RPC URL and private key (see below):
+
+   ```
+   AMOY_RPC_URL=https://polygon-amoy.g.alchemy.com/v2/your-api-key
+   PRIVATE_KEY=your-wallet-private-key
+   ```
+
+   > ⚠ **Important:** Do not commit this file to version control — it contains sensitive credentials.
+
+5. Deploy to the Polygon Amoy testnet:
+   ```bash
+   npx hardhat run Scripts/deploy.js --network amoy
+   ```
+
+6. Update the contract address in the frontend:
+
+   After deployment, copy the deployed contract address from the console output and **replace the placeholder address in your `frontend.html`** file:
+
+   ```javascript
+   const CONTRACT_ADDRESS = "0xYourDeployedContractAddressHere";
+   ```
+
+   Also make sure your ABI definition matches the deployed contract — either inline in the JS or imported from `artifacts/`.
+
+7. Serve the frontend locally (important — do not use `file://`):
+
+   ```bash
+   npx serve .         # if using npm serve
+   # OR
+   python -m http.server
+   ```
+
+   Then open in your browser:
+   ```
+   http://localhost:3000/frontend.html
+   ```
+
+8. Connect your wallet:
+
+   - Click **"Connect Wallet"** in the interface.
+   - MetaMask or Rabby will prompt to connect and switch to **Polygon Amoy** if needed.
+   - Once connected, you can mint, retire, and donate tokens from the browser.
+
+---
+
+##  Technical Notes
+
+- Built with **ERC-1155** to support multiple carbon credit projects in one contract
+- Contract interactions handled via **Ethers.js**
+- Uses `wallet_switchEthereumChain` to prompt users to switch to Amoy
+- Frontend reads metadata locally but could be extended to pull from IPFS
+- Wallet and balance updates are handled after each on-chain transaction
+
+---
+
+## Acknowledgements
+
+- [Polygon Amoy Testnet](https://wiki.polygon.technology/docs/pos/polygon-testnet-faucet/)
+- [Alchemy](https://www.alchemy.com/)
+- [OpenZeppelin](https://openzeppelin.com/)
+- [Ethers.js](https://docs.ethers.org/)
+
+---
+## License 
+
+This project was created for academic purposes and is not intended for commercial use or redistribution.
+
+---
+
+## Author
+
+**Marcus Rigler**  
+Developed as part of a FinTech MVP showcase project.
 
 
 
