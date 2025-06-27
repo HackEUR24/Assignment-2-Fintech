@@ -70,6 +70,9 @@ npm init -y                          # Initialize Node.js project
 npm install --save-dev hardhat      # Install Hardhat
 npx hardhat                         # Launch Hardhat setup wizard
 ```
+
+---
+
 ##  Project Structure
 
 ```
@@ -86,6 +89,33 @@ zerofy-mvp/
 └── README.md             # Project documentation (you’re reading it!)
 ```
 
+###  Key File Descriptions
+
+- **`contracts/ZFYC.sol`**  
+  The core ERC-1155 smart contract representing fractional carbon credits. It includes custom logic for:
+  - Minting tokens to a specific project ID
+  - Retiring tokens (burning for carbon offset)
+  - Donating tokens to whitelisted NGO addresses
+
+- **`Scripts/deploy.js`**  
+  A deployment script using Hardhat that:
+  - Compiles and deploys the ZFYC contract
+  - Logs the deployed contract address (used in the frontend)
+  - Uses a private key and RPC URL provided via `.env`
+
+- **`hardhat.config.js`**  
+  Configuration file specifying:
+  - Network settings (Polygon Amoy testnet)
+  - Solidity version and compiler settings
+  - Path customization and plugin registration (e.g., Ethers)
+
+- **`frontend.html`**  
+  A standalone HTML interface for interacting with the smart contract. It includes:
+  - Wallet connection logic (MetaMask/Rabby)
+  - Functions for minting, retiring, and donating tokens
+  - UI elements for selecting projects and viewing balances
+  - On-chain transaction feedback with Polygonscan links
+---
 ##  Installation & Setup
 
 1. Clone the repository:
@@ -111,7 +141,7 @@ zerofy-mvp/
    PRIVATE_KEY=your-wallet-private-key
    ```
 
-   > ⚠ **Important:** Do not commit this file to version control — it contains sensitive credentials.
+   >  **Important:** Do not commit this file to version control — it contains sensitive credentials.
 
 5. Deploy to the Polygon Amoy testnet:
    ```bash
