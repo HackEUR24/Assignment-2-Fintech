@@ -2,17 +2,16 @@
 
 Zerofy is a decentralized platform that enables users to **mint**, **retire**, and **donate** fractional carbon credits, represented as ERC-1155 tokens, on the Polygon Amoy testnet.
 
-This MVP showcases a blockchain-based approach to environmental accountability, allowing individuals to contribute to verified climate projects through transparent, on-chain actions.
+This MVP shows how blockchain-based technology can be applied to the use case of carbon credidts, by providing accesibiltiy to verified climate projects for individuals.
 
 ## Key Features
 
-- **Wallet Connection** via MetaMask or Rabby
-- **Mint Carbon Credits** tied to specific sustainability projects
-- **Retire Credits** and generate public, verifiable offset receipts
-- **Donate Credits** to selected environmental NGOs
+- **Wallet Connection** via MetaMask 
+- **Mint Carbon Credits** tied to specific sustainability projects - the ones used here are purely exemplary
+- **Retire Credits** resulting in verifyable receipts for users
+- **Donate Credits** to selected environmental NGOs for tax credit purposes
 - Powered by **Hardhat**, **Ethers.js**, and deployed on **Polygon Amoy**
 
-This project demonstrates how blockchain can support traceable, programmable climate action in a user-friendly web interface.
 
 ## Programs Used
 
@@ -35,7 +34,7 @@ This project demonstrates how blockchain can support traceable, programmable cli
 - Transaction signing for minting, retiring, and donating tokens
 - Gas fee payment using testnet POL tokens
 
->  A small testnet POL balance is required, which can be obtained from an [Amoy faucet](https://faucet.stakepool.dev.br/amoy).
+>  To run these scripts a small balance of amoy test POL is needed. These can be retrieved for free from a faucet such as [stakepool faucet](https://faucet.stakepool.dev.br/amoy).
 
 ---
 
@@ -134,14 +133,14 @@ zerofy-mvp/
    npx hardhat compile
    ```
 
-4. Configure `.env` with your Alchemy RPC URL and private key (see below):
+4. Configure `.env` with your Alchemy RPC URL and private key:
 
    ```
    AMOY_RPC_URL=https://polygon-amoy.g.alchemy.com/v2/your-api-key
    PRIVATE_KEY=your-wallet-private-key
    ```
 
-   >  **Important:** Do not commit this file to version control — it contains sensitive credentials.
+   >  **Important:** As this .env file includes sensitive information (your private key) do not upload this anywhere or include it in your version control
 
 5. Deploy to the Polygon Amoy testnet:
    ```bash
@@ -156,7 +155,7 @@ zerofy-mvp/
    const CONTRACT_ADDRESS = "0xYourDeployedContractAddressHere";
    ```
 
-   Also make sure your ABI definition matches the deployed contract — either inline in the JS or imported from `artifacts/`.
+   Also make sure your ABI definition matches the deployed contract.
 
 7. Serve the frontend locally (important — do not use `file://`):
 
@@ -174,7 +173,7 @@ zerofy-mvp/
 8. Connect your wallet:
 
    - Click **"Connect Wallet"** in the interface.
-   - MetaMask or Rabby will prompt to connect and switch to **Polygon Amoy** if needed.
+   - MetaMask will prompt to connect and switch to **Polygon Amoy** if needed.
    - Once connected, you can mint, retire, and donate tokens from the browser.
 
 ---
@@ -184,7 +183,7 @@ zerofy-mvp/
 - Built with **ERC-1155** to support multiple carbon credit projects in one contract
 - Contract interactions handled via **Ethers.js**
 - Uses `wallet_switchEthereumChain` to prompt users to switch to Amoy
-- Frontend reads metadata locally but could be extended to pull from IPFS
+- Frontend reads metadata locally but production ready setup will include these on chain
 - Wallet and balance updates are handled after each on-chain transaction
 
 ---
